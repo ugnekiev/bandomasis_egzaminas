@@ -15,12 +15,23 @@ function Main() {
     const [story, setStory] = useState(null);
     const [idea, setIdea] = useState (0);
 
+    const reList = data => {
+        const d = new Map();
+        data.forEach(line => {
+            if (d.has(line.title)) {
+                d.set(line.title, [...d.get(line.title), line]);
+            } else {
+                d.set(line.title, [line]);
+            }
+        });
+        return [...d];
+    }
     //READ for list
     useEffect(() => {
         axios.get('http://localhost:3003/server/home')
             .then(res => {
-                console.log(res.data);
-                setRows(res.data);
+                console.log(reList(res.data));
+                setRows(reList(res.data));
             })
     }, [lastUpdate]);
     useEffect(() => {

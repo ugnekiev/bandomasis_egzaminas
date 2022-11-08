@@ -13,7 +13,7 @@ function Main() {
     const [deleteData, setDeleteData] = useState(null);
     const [modalData, setModalData] = useState(null);
     const [editData, setEditData] = useState(null);
-
+console.log(ideas)
 
 
   useEffect(() => {

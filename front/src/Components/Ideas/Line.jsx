@@ -23,8 +23,8 @@ function Line({ idea }) {
 
                 </div>
                 <div className="line__buttons">
-                <button onClick={() => setModalData(ideas)}type="button" className="btn btn-outline-primary">Edit</button>
-                <button onClick={() => setDeleteData(ideas)} type="button" className="btn btn-outline-danger">Delete</button>
+                <button onClick={() => setModalData(idea)}type="button" className="btn btn-outline-primary">Edit</button>
+                <button onClick={() => setDeleteData(idea)} type="button" className="btn btn-outline-danger">Delete</button>
                 </div>
                 
             </div>

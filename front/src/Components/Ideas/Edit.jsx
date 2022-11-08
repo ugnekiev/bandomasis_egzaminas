@@ -23,7 +23,7 @@ function Edit() {
   }
 
   const { modalData, setModalData, setEditData } = useContext(Ideas);
-
+console.log(modalData)
   const edit = () => {
     setEditData({
       title,

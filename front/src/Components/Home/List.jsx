@@ -13,6 +13,7 @@ console.log(rows)
       <h5 className="card-header">Stories List</h5>
       <div className="card-body"></div>
       <ul className="list-group">
+        
         {
           rows?.map(r => <Line key={r.id} row={r} />
           )

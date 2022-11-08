@@ -101,7 +101,7 @@ app.delete("/server/ideas/:id", (req, res) => {
 //jungiu lenteles
 app.get("/server/home", (req, res) => {
     const sql = `
-    SELECT story, d.*, donation_sum
+    SELECT i.*, d.id AS did, name, surname, donation
     FROM ideas AS i
     INNER JOIN donors AS d
     ON d.idea_id = i.id
@@ -125,14 +125,14 @@ app.post("/server/home", (req, res) => {
     });
 });
 
-app.get("/server/home", (req, res) => {
-    const sql = `
-    SELECT id, name, surname, donation
-    FROM donors
-    ORDER BY id DESC
-    `;
-    con.query(sql, (err, result) => {
-        if (err) throw err;
-        res.send(result);
-    });
-});
+// app.get("/server/home", (req, res) => {
+//     const sql = `
+//     SELECT id, name, surname, donation
+//     FROM donors
+//     ORDER BY id DESC
+//     `;
+//     con.query(sql, (err, result) => {
+//         if (err) throw err;
+//         res.send(result);
+//     });
+// });
