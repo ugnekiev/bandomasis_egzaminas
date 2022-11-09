@@ -5,6 +5,7 @@ import MainI from './Components/Ideas/Main';
 // import MainP from './components/paslaugos/Main';
 import Home from './Components/Home/Main';
 import Nav from './Components/Nav';
+import Main from './Components/Donations/Main';
 
 // import axios from "axios"
 
@@ -24,7 +25,7 @@ function App() {
     {/* <Route path="/login" element={<LoginPage setRoleChange={setRoleChange} />} /> */}
     {/* <Route path="/logout" element={<LogoutPage setRoleChange={setRoleChange} />} /> */}
     <Route path="/stories" element={<RequireAuth role="admin"><MainI /></RequireAuth>}></Route>
-    <Route path="/donate" element={<RequireAuth role="admin">Donations</RequireAuth>}></Route>
+    <Route path="/donate" element={<RequireAuth role="admin"><Main /></RequireAuth>}></Route>
     </Routes>
     </BrowserRouter>
   );

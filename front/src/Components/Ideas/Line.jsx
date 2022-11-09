@@ -4,7 +4,7 @@ import Ideas from "../../Contexts/Ideas";
 
 function Line({ idea }) {
 
-    const { ideas, setModalData, setDeleteData } = useContext(Ideas);
+    const { setModalData, setDeleteData } = useContext(Ideas);
 
     console.log(idea)
     console.log(setDeleteData);

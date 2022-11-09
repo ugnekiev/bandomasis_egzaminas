@@ -112,9 +112,22 @@ app.get("/server/home", (req, res) => {
         res.send(result);
     });
 });
+// create donate
+app.get("/server/donate", (req, res) => {
+    const sql = `
+    SELECT id, name, surname, donation
+    FROM donors
+    ORDER BY id DESC
+    `;
+    con.query(sql, (err, result) => {
+        if (err) throw err;
+        res.send(result);
+    });
+});
 
-//create home list
-app.post("/server/home", (req, res) => {
+
+//create donate 
+app.post("/server/donate", (req, res) => {
     const sql = `
     INSERT INTO donors (name, surname, donation, idea_id)
     VALUES (?, ?, ?, ?)
