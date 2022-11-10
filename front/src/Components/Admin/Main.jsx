@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import List from "./List";
+import { authConfig } from "../../Functions/auth";
 import { ShowNav } from "../../App";
 
 function Main({ roleChange }) {
@@ -20,7 +21,7 @@ function Main({ roleChange }) {
     }
     //READ for list
     useEffect(() => {
-        axios.get('http://localhost:3003/server/home')
+        axios.get('http://localhost:3003/server/admin', authConfig())
             .then(res => {
                 console.log(reList(res.data));
                 setRows(reList(res.data));
@@ -31,8 +32,8 @@ function Main({ roleChange }) {
         <ShowNav roleChange={roleChange} />
         <List rows={rows} />
     </>
-
     );
+
 }
 
 export default Main;

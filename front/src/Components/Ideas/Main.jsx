@@ -4,71 +4,73 @@ import axios from 'axios';
 import List from "./List";
 import Ideas from "../../Contexts/Ideas";
 import Edit from "./Edit";
+import { ShowNav } from "../../App";
 
-function Main() {
+function Main(roleChange) {
 
-    const [lastUpdate, setLastUpdate] = useState(Date.now);
-    const [createData, setCreateData] = useState(null);
-    const [ideas, setIdeas] = useState(null);
-    const [deleteData, setDeleteData] = useState(null);
-    const [modalData, setModalData] = useState(null);
-    const [editData, setEditData] = useState(null);
-console.log(ideas)
+  const [lastUpdate, setLastUpdate] = useState(Date.now);
+  const [createData, setCreateData] = useState(null);
+  const [ideas, setIdeas] = useState(null);
+  const [deleteData, setDeleteData] = useState(null);
+  const [modalData, setModalData] = useState(null);
+  const [editData, setEditData] = useState(null);
+  console.log(ideas)
 
 
   useEffect(() => {
-  axios.get('http://localhost:3003/server/ideas')
-  .then(res => {
-    setIdeas(res.data);
-  })
+    axios.get('http://localhost:3003/server/ideas')
+      .then(res => {
+        setIdeas(res.data);
+      })
   }, [lastUpdate]);
 
-//CREATE
+  //CREATE
   useEffect(() => {
-  if(null === createData) {
-    return;
-  }
-  axios.post('http://localhost:3003/server/ideas', createData)
-        .then(res => {
-          setLastUpdate(Date.now());
+    if (null === createData) {
+      return;
     }
-    );
-},[createData])
+    axios.post('http://localhost:3003/server/ideas', createData)
+      .then(res => {
+        setLastUpdate(Date.now());
+      }
+      );
+  }, [createData])
 
-//DELETE
-useEffect(() => {
-  if(null === deleteData) {
-    return;
-  }
-  axios.delete('http://localhost:3003/server/ideas/'+ deleteData.id)
-        .then(res => {
-          setLastUpdate(Date.now());
+  //DELETE
+  useEffect(() => {
+    if (null === deleteData) {
+      return;
     }
-    );
-},[deleteData])
+    axios.delete('http://localhost:3003/server/ideas/' + deleteData.id)
+      .then(res => {
+        setLastUpdate(Date.now());
+      }
+      );
+  }, [deleteData])
 
-//EDIT
-useEffect(() => {
-  if(null === editData) {
-    return;
-  }
-  axios.put('http://localhost:3003/server/ideas/'+ editData.id, editData)
-        .then(res => {
-          setLastUpdate(Date.now());
+  //EDIT
+  useEffect(() => {
+    if (null === editData) {
+      return;
     }
-    );
-},[editData])
+    axios.put('http://localhost:3003/server/ideas/' + editData.id, editData)
+      .then(res => {
+        setLastUpdate(Date.now());
+      }
+      );
+  }, [editData])
 
 
-  return (
+  return (<>
+    <ShowNav roleChange={roleChange} />
     <Ideas.Provider value={{
-        setCreateData,
-        ideas,
-        setDeleteData,
-        modalData, 
-        editData,
-        setEditData,
-        setModalData
+      setCreateData,
+      ideas,
+      setDeleteData,
+      modalData,
+      editData,
+      setEditData,
+      setModalData
 
     }}>
       <div className="container">
@@ -83,6 +85,7 @@ useEffect(() => {
       </div>
       <Edit />
     </Ideas.Provider>
+  </>
   );
 }
 export default Main;

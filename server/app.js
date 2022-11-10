@@ -4,6 +4,8 @@ const port = 3003;
 app.use(express.json({ limit: '10mb' }));
 const cors = require("cors");
 app.use(cors());
+const md5 = require('js-md5');
+const uuid = require('uuid');
 const mysql = require("mysql");
 app.use(
     express.urlencoded({
@@ -25,6 +27,114 @@ con.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
 });
+
+
+//////////////////LOGIN START/////////////////////////
+
+const doAuth = function(req, res, next) {
+    if (0 === req.url.indexOf('/admin')) { // admin
+        const sql = `
+        SELECT
+        name, role
+        FROM users
+        WHERE session = ?
+    `;
+        con.query(
+            sql, [req.headers['authorization'] || ''],
+            (err, results) => {
+                if (err) throw err;
+                if (!results.length || results[0].role !== 10) {
+                    res.status(401).send({});
+                    req.connection.destroy();
+                } else {
+                    next();
+                }
+            }
+        );
+    } else if (0 === req.url.indexOf('/login-check') 
+    || 0 === req.url.indexOf('/login')
+    || 0 === req.url.indexOf('/')
+    || 0 === req.url.indexOf('/stories')
+    || 0 === req.url.indexOf('/donate')) {
+        next();
+    } else { // fron
+        const sql = `
+        SELECT
+        name, role
+        FROM users
+        WHERE session = ?
+    `;
+        con.query(
+            sql, [req.headers['authorization'] || ''],
+            (err, results) => {
+                if (err) throw err;
+                if (!results.length) {
+                    res.status(401).send({});
+                    req.connection.destroy();
+                } else {
+                    next();
+                }
+            }
+        );
+    }
+}
+app.use(doAuth)
+
+// AUTH
+app.get("/login-check", (req, res) => {
+    const sql = `
+         SELECT
+         name, role
+         FROM users
+         WHERE session = ?
+        `;
+    con.query(sql, [req.headers['authorization'] || ''], (err, result) => {
+        if (err) throw err;
+        if (!result.length) {
+            res.send({ msg: 'error', status: 1 }); // user not logged
+        } else {
+            if ('admin' === req.query.role) {
+                if (result[0].role !== 10) {
+                    res.send({ msg: 'error', status: 2 }); // not an admin
+                } else {
+                    res.send({ msg: 'ok', status: 3 }); // is admin
+                }
+            } else {
+                res.send({ msg: 'ok', status: 4 }); // is user
+            }
+        }
+    });
+});
+
+app.post("/login", (req, res) => {
+    const key = uuid.v4();
+    const sql = `
+    UPDATE users
+    SET session = ?
+    WHERE name = ? AND psw = ?
+  `;
+    con.query(sql, [key, req.body.user, md5(req.body.pass)], (err, result) => {
+        if (err) throw err;
+        if (!result.affectedRows) {
+            res.send({ msg: 'error', key: '' });
+        } else {
+            res.send({ msg: 'ok', key, text: 'Good to see you ' + req.body.user + ' again.', type: 'info' });
+        }
+    });
+});
+
+app.post("/register", (req, res) => {
+    const key = uuid.v4();
+    const sql = `
+    INSERT INTO users (name, psw, session)
+    VALUES (?, ?, ?)
+  `;
+    con.query(sql, [req.body.name, md5(req.body.pass), key], (err, result) => {
+        if (err) throw err;
+        res.send({ msg: 'ok', key, text: 'Welcome!', type: 'info' });
+    });
+});
+//////////////////LOGIN END///////////////////////////
 
 app.listen(port, () => {
     console.log(`fundrise in ${port} port!`)
@@ -105,6 +215,7 @@ app.get("/server/home", (req, res) => {
     FROM ideas AS i
     INNER JOIN donors AS d
     ON d.idea_id = i.id
+    WHERE confirmed = 1
     `;
  
     con.query(sql, (err, result) => {
@@ -138,14 +249,39 @@ app.post("/server/donate", (req, res) => {
     });
 });
 
-// app.get("/server/home", (req, res) => {
-//     const sql = `
-//     SELECT id, name, surname, donation
-//     FROM donors
-//     ORDER BY id DESC
-//     `;
-//     con.query(sql, (err, result) => {
-//         if (err) throw err;
-//         res.send(result);
-//     });
-// });
+app.get("/server/admin", (req, res) => {
+    const sql = `
+    SELECT *
+    FROM ideas
+    ORDER BY id DESC
+    `;
+    con.query(sql, (err, result) => {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
+app.put("/server/ideas/confirmed/:id", (req, res) => {
+   let  sql = `
+        UPDATE ideas
+        SET confirmed = 1
+        WHERE id = ?
+        `;
+    
+    con.query(sql, [req.params.id], (err, result) => {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
+//delete
+app.delete("/server/ideas/confirmed/:id", (req, res) => {
+    const sql = `
+    DELETE from ideas
+    WHERE id = ?
+    `;
+    con.query(sql, [req.params.id], (err, result) => {
+        if (err) throw err;
+        res.send(result);
+    });
+});

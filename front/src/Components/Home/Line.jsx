@@ -1,14 +1,8 @@
-
-
 function Line({ row }) {
-
-
 
     const collected = row[1].reduce((prev, curr) => prev + curr.donation, 0)
     const goal = row[1][0].donation_sum
     console.log(row)
-
-
 
     return (
         <li className="list-group-item">
@@ -23,13 +17,12 @@ function Line({ row }) {
                     <div className="home__content__comment">{row[1][0].story}</div>
                     <h2 className="home__content__title">donors:</h2>
                     <ul className="home__content__donors">
-                    {row[1].map(obj => 
-                    
+                        {row[1].map(obj =>
                             <li key={obj.did}>
                                 {obj.name} {obj.surname} {obj.donation}
                             </li>
-                      )}
-                      </ul>
+                        )}
+                    </ul>
                 </div>
             </div>
         </li>

@@ -1,3 +1,4 @@
+
 @import "~bootstrap/scss/bootstrap";
 @import './sass/line';
 .modal {
@@ -15,10 +16,10 @@
         cursor: pointer;
         user-select: none;
         position: absolute;
-        background-color: rgb(117, 117, 117);
+        background-color: black;
         width: 24px;
         height: 24px;
-        color: white;
+        color: crimson;
         font-weight: bold;
         top: 5px;
         left: -5px;
@@ -49,4 +50,34 @@
     color: crimson;
     border: 1px solid crimson;
     padding: 0 20px;
+}
+
+h5 small {
+    font-size: 70%;
+    color: skyblue;
+    cursor: pointer;
+    user-select: none;
+}
+
+.msg-bin {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    .toast {
+        display: block;
+        margin: 10px;
+        &.ok {
+            background-color: aquamarine;
+            color: white;
+        }
+        &.error {
+            background-color: crimson;
+            color: white;
+        }
+        &.info {
+            background-color: skyblue;
+            color: white;
+        }
+    }
 }
