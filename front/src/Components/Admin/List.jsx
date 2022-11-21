@@ -1,8 +1,8 @@
 
 import Line from "./Line";
 
-function List({ rows }) {
-  console.log(rows)
+function List({ rows, setLastUpdate }) {
+  // console.log(rows)
 
   return (
     <div className="container">
@@ -13,7 +13,7 @@ function List({ rows }) {
             <div className="card-body"></div>
             <ul className="list-group">
               {
-                rows?.map((r, i) => <Line key={i} row={r} />
+                rows?.map((r, i) => <Line key={i} row={r} setLastUpdate={setLastUpdate}/>
                 )
               }
             </ul>

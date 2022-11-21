@@ -1,21 +1,18 @@
 import axios from "axios";
 import { authConfig } from "../../Functions/auth";
-import { useState } from "react";
 
-function Line({ row }) {
+function Line({ row, setLastUpdate }) {
 
     const goal = row[1][0].donation_sum
-    console.log(row)
-    const [lastUpdate, setLastUpdate] = useState(Date.now);
-
-
+    // console.log(row)
+  
     const confirm = () => {
 
         //axios.put url ir paduoti id
         console.log(row[1][0].id)
         axios.put('http://localhost:3003/server/ideas/confirmed/' + row[1][0].id, row[1][0].id, authConfig())
             .then(res => {
-
+                setLastUpdate(Date.now());
             })
     };
 

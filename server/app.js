@@ -19,7 +19,7 @@ const con = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "fundrise",
+    database: "fundrise2",
 
 });
 
@@ -185,7 +185,7 @@ app.put("/server/ideas/:id", (req, res) => {
     } else {
         sql = `
         UPDATE ideas
-        SET title = ?, story = ?, donation_sum = ?,
+        SET title = ?, story = ?, donation_sum = ?
         WHERE id = ?
         `;
         r = [req.body.title, req.body.story, req.body.donation_sum, req.params.id]

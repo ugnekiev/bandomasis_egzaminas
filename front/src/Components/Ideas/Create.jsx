@@ -60,7 +60,7 @@ const create = () => {
       </div> : null}
       <div className="mb-3">
         <label className="form-label">Goal</label>
-        <input type="number" className="form-control" value={donation_sum} onChange={e => setDonation_sum(e.target.value)} />
+        <input type="text" className="form-control" value={donation_sum} onChange={e => setDonation_sum(e.target.value)} />
       </div>
       <button onClick={create} type="button" className="btn btn-outline-dark">Create</button>
     </div>
